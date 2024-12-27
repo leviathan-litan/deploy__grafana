@@ -82,16 +82,6 @@
     mv /etc/yum.repos.d/* {{ linux__dir_yum_repofile_backup }}
   ignore_errors: yes
 
-- name: "yum: repofile"
-  template:
-    owner: root
-    group: root
-    mode: 0755
-    src: "{{ item.temp }}"
-    dest: "{{ item.repo }}"
-  with_items:
-    - "{{ linux__yum_list }}"
-
 - name: "time zone"
   shell: |
     timedatectl set-timezone {{ linux__timezone }}

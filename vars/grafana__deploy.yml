@@ -18,10 +18,6 @@ linux__chrony_install_media_upload: "/upload/chrony"
 
 linux__dir_yum_repofile_backup: "/upload/yum_repofile"
 
-linux__yum_list:
-  - repo: "grafana.repo"
-    temp: "grafana.repo.j2"
-
 # %%%%%%%%%%%%%%%%%%%% ROLE: PYTHON
 
 python__upload: "/upload/python"
@@ -59,6 +55,10 @@ java__dir_base: "/usr/local"
 java__dir_home: "{{ java__dir_base }}/jdk-17.0.10"
 
 # %%%%%%%%%%%%%%%%%%%% ROLE: Grafana
+
+grafana__yum_list:
+  - repo: "grafana.repo"
+    temp: "grafana.repo.j2"
 
 # Grafana OSS
 # grafana__rpm_package: "grafana"

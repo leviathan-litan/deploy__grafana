@@ -1,3 +1,13 @@
+- name: "yum: repofile"
+  template:
+    owner: root
+    group: root
+    mode: 0755
+    src: "{{ item.temp }}"
+    dest: "{{ item.repo }}"
+  with_items:
+    - "{{ grafana__yum_list }}"
+
 - name: "yum: install grafana"
   yum:
     name: "{{ item }}"
