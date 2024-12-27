@@ -1,0 +1,6 @@
+- name: "yum: install grafana"
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ grafana__rpm_list }}"

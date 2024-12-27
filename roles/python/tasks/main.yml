@@ -1,0 +1,20 @@
+- name: "create directory"
+  file:
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+    path: "{{ python__upload }}"
+
+- name: "upload pexpect install media"
+  unarchive:
+    owner: root
+    group: root
+    mode: 0755
+    src: pexpect-3.3.tar.gz
+    dest: "{{ python__upload }}"
+
+- name: "install pexpect"
+  shell: |
+    cd {{ python__upload}}/pexpect-3.3 && {{ python__command }} setup.py install
+  ignore_errors: yes

@@ -1,0 +1,74 @@
+# %%%%%%%%%%%%%%%%%%%% ROLE: LINUX
+
+# --- 开关
+
+linux__enable_time: yes
+linux__enable_time_ntp: yes
+
+# --- 参数
+
+# 操作系统时区
+linux__timezone: "Asia/Shanghai"
+linux__time_ntp_servers:
+  - ntp.aliyun.com
+  - ntp.tencent.com
+
+linux__chrony_install_media: "chrony.zip"
+linux__chrony_install_media_upload: "/upload/chrony"
+
+linux__dir_yum_repofile_backup: "/upload/yum_repofile"
+
+linux__yum_list:
+  - repo: "grafana.repo"
+    temp: "grafana.repo.j2"
+
+# %%%%%%%%%%%%%%%%%%%% ROLE: PYTHON
+
+python__upload: "/upload/python"
+python__command: "python2"
+
+# %%%%%%%%%%%%%%%%%%%% ROLE: MYSQL
+
+# --- 开关
+
+mysql__enabled_create_db_user: yes
+
+# --- 参数
+
+# Cluster
+# Standalone
+mysql__deploy_arch: standalone
+
+# 数据库时区
+mysql__default_timezone: "+08:00"
+
+mysql__db_root_password: "Root@123"
+
+# mysql__install_media: "MySQL__8.2.0.1__el7_x86_64_rpms.zip"
+mysql__install_media: "{{ dir__ansible_server__files }}/mysql/MySQL__8.2.0.1__el7_x86_64_rpms.zip"
+
+mysql__dir_upload: "/upload/mysql"
+mysql__install_media_uploaded: "{{ mysql__dir_upload }}/install_media"
+
+mysql__dir_data: "/data/mysql"
+
+# %%%%%%%%%%%%%%%%%%%% ROLE: JAVA
+
+java__install_media: "{{ dir__ansible_server__files }}/java/jdk-17.0.10_linux-x64_bin.tar.gz"
+java__dir_base: "/usr/local"
+java__dir_home: "{{ java__dir_base }}/jdk-17.0.10"
+
+# %%%%%%%%%%%%%%%%%%%% ROLE: Grafana
+
+# Grafana OSS
+# grafana__rpm_package: "grafana"
+
+# Grafana Enterprise
+# grafana__rpm_package: "grafana-enterprise"
+
+# Grafana RPM List
+grafana__rpm_list:
+  # Grafana OSS
+  - "grafana"
+  # Grafana Enterprise
+  # - "grafana-enterprise"

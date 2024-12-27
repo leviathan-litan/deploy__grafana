@@ -1,0 +1,59 @@
+- name: "Linux Config"
+  hosts:
+    - grafana
+  roles:
+    - linux
+  vars_files:
+    - vars/grafana__deploy.yml
+  gather_facts: yes
+  become: yes
+  become_user: root
+  become_method: sudo
+
+- name: "Deploy Python"
+  hosts:
+    - grafana
+  roles:
+    - python
+  vars_files:
+    - vars/grafana__deploy.yml
+  gather_facts: yes
+  become: yes
+  become_user: root
+  become_method: sudo
+
+- name: "Deploy Java"
+  hosts:
+    - grafana
+  roles:
+    - java
+  vars_files:
+    - vars/grafana__deploy.yml
+  gather_facts: yes
+  become: yes
+  become_user: root
+  become_method: sudo
+
+- name: "Deploy MySQL"
+  hosts:
+    - mysql
+  roles:
+    - mysql
+  vars_files:
+    - vars/grafana__deploy.yml
+  gather_facts: yes
+  become: yes
+  become_user: root
+  become_method: sudo
+
+- name: "Deploy Grafana"
+  hosts:
+    - grafana
+  roles:
+    - grafana
+  vars_files:
+    - vars/grafana__deploy.yml
+  gather_facts: yes
+  become: yes
+  become_user: root
+  become_method: sudo

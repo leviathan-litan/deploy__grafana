@@ -1,0 +1,117 @@
+- name: "create directory"
+  file:
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+    path: "{{ item }}"
+  with_items:
+    - "{{ mysql__dir_upload }}"
+    - "{{ mysql__install_media_uploaded }}"
+    - "{{ linux__dir_yum_repofile_backup }}"
+
+- name: "upload and uncompress mysql install media"
+  unarchive:
+    owner: root
+    group: root
+    mode: 0755
+    src: "{{ mysql__install_media }}"
+    dest: "{{ mysql__install_media_uploaded }}"
+
+- name: "Find all rpm packages in {{ mysql__install_media_uploaded }}"
+  find:
+    path: "{{ mysql__install_media_uploaded }}"
+    patterns: "*.rpm"
+  register: rpm_files
+
+- name: "set fact: rpm_list"
+  set_fact:
+    rpm_list: "{{ rpm_files.files | map(attribute='path') | list }}"
+
+- name: "rpm uninstall mariadb"
+  shell: |
+    rpm -e --nodeps mariadb-libs
+  ignore_errors: yes
+
+# 方式一
+# - name: "Install MySQL Server by yum and rpms"
+#   shell: |
+#     rpm -ivh {{ item }}
+#   with_items:
+#     - "{{ rpm_list }}"
+#   ignore_errors: yes
+
+# 方式二
+- name: "createrepo"
+  shell: |
+    createrepo {{ mysql__install_media_uploaded }}
+
+# - name: "backup original yum repofile"
+#   shell: |
+#     mv /etc/yum.repos.d/* {{ linux__dir_yum_repofile_backup }}
+#   ignore_errors: yes
+
+- name: "yum local repofile"
+  template:
+    owner: root
+    group: root
+    mode: 0755
+    src: "local.repo.j2"
+    dest: "/etc/yum.repos.d/local.repo"
+  
+- name: "yum makecache"
+  shell: |
+    yum makecache
+  ignore_errors: yes
+
+# not install: 'mysql-community-devel'
+- name: "yum install"
+  yum:
+    name:  ['mysql-community-client', 'mysql-community-client-plugins', 'mysql-community-common', 'mysql-community-debuginfo', 'mysql-community-embedded-compat', 'mysql-community-icu-data-files', 'mysql-community-libs', 'mysql-community-libs-compat', 'mysql-community-server', 'mysql-community-server-debug','mysql-community-test']
+    state: present
+  ignore_errors: yes
+
+- name: "create MySQL Data Directory"
+  file:
+    state: directory
+    owner: mysql
+    group: mysql
+    mode: 0755
+    path: "{{ mysql__dir_data }}"
+
+- name: "create my.cnf file"
+  template:
+    owner: root
+    group: root
+    mode: 0644
+    src: my.cnf.j2
+    dest: "/etc/my.cnf"
+
+- name: "MySQL: start linux service"
+  systemd:
+    name: mysqld
+    state: started
+    enabled: yes
+
+- name: "Get mysql temporary root password"
+  shell: |
+    cat /var/log/mysqld.log | grep 'temporary password' | awk '{ print $NF}' | tail -n 1
+  register: mysql_tmp_password
+
+- name: "MySQL: set new mysql root password"
+  shell: |
+    mysqladmin -h localhost -u root -p'{{ mysql_tmp_password.stdout }}' password '{{ mysql__db_root_password }}'
+
+- name: "create_user.sql / upload"
+  template:
+    owner: root
+    group: root
+    mode: 0600
+    src: "create_user.sql.j2"
+    dest: "{{ mysql__dir_upload }}/create_user.sql"
+
+- name: "create_user.sql / execute"
+  shell: |
+    mysql -uroot -p'{{ mysql__db_root_password }}' < {{ mysql__dir_upload }}/create_user.sql
+  when:
+    - mysql__enabled_create_db_user
