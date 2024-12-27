@@ -1,0 +1,4 @@
+create database {{ grafana__db_name }};
+CREATE USER '{{ grafana__db_user }}'@'%' IDENTIFIED with mysql_native_password BY '{{ grafana__db_password }}';
+GRANT ALL ON {{ grafana__db_name }}.* TO '{{ grafana__db_user }}'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;

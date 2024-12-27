@@ -51,13 +51,13 @@
 #     mv /etc/yum.repos.d/* {{ linux__dir_yum_repofile_backup }}
 #   ignore_errors: yes
 
-- name: "yum local repofile"
+- name: "yum mysql repofile"
   template:
     owner: root
     group: root
     mode: 0755
-    src: "local.repo.j2"
-    dest: "/etc/yum.repos.d/local.repo"
+    src: "mysql.repo.j2"
+    dest: "/etc/yum.repos.d/mysql.repo"
   
 - name: "yum makecache"
   shell: |
@@ -102,16 +102,34 @@
   shell: |
     mysqladmin -h localhost -u root -p'{{ mysql_tmp_password.stdout }}' password '{{ mysql__db_root_password }}'
 
-- name: "create_user.sql / upload"
+# 创建用户
+# - name: "create_user.sql / upload"
+#   template:
+#     owner: root
+#     group: root
+#     mode: 0600
+#     src: "create_user.sql.j2"
+#     dest: "{{ mysql__dir_upload }}/create_user.sql"
+
+# - name: "create_user.sql / execute"
+#   shell: |
+#     mysql -uroot -p'{{ mysql__db_root_password }}' < {{ mysql__dir_upload }}/create_user.sql
+#   when:
+#     - mysql__enabled_create_db_user
+
+# 执行SQL
+- name: "sql files / upload"
   template:
     owner: root
     group: root
     mode: 0600
-    src: "create_user.sql.j2"
-    dest: "{{ mysql__dir_upload }}/create_user.sql"
+    src: "{{ item.temp }}"
+    dest: "{{ mysql__dir_upload }}/{{ item.sql }}"
+  with_items:
+    - "{{ mysql__sql_files }}"
 
-- name: "create_user.sql / execute"
+- name: "sql files / execute"
   shell: |
-    mysql -uroot -p'{{ mysql__db_root_password }}' < {{ mysql__dir_upload }}/create_user.sql
-  when:
-    - mysql__enabled_create_db_user
+    mysql -uroot -p'{{ mysql__db_root_password }}' < {{ mysql__dir_upload }}/{{ item.sql }}
+  with_items:
+    - "{{ mysql__sql_files }}"
