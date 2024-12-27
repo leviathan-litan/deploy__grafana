@@ -28,3 +28,4 @@
     name: grafana-server
     state: started
     enabled: yes
+  ignore_errors: yes
