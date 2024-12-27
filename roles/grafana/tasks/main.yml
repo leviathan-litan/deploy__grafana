@@ -4,7 +4,7 @@
     group: root
     mode: 0755
     src: "{{ item.temp }}"
-    dest: "{{ item.repo }}"
+    dest: "/etc/yum.repos.d/{{ item.repo }}"
   with_items:
     - "{{ grafana__yum_list }}"
 
@@ -14,3 +14,17 @@
     state: present
   with_items:
     - "{{ grafana__rpm_list }}"
+
+- name: "grafana: config file"
+  template:
+    owner: root
+    group: grafana
+    mode: 0755
+    src: "grafana.ini.j2"
+    dest: "/etc/grafana/grafana.ini"
+
+- name: "grafana-server: start linux service"
+  systemd:
+    name: grafana-server
+    state: started
+    enabled: yes

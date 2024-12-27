@@ -72,3 +72,9 @@ grafana__rpm_list:
   - "grafana"
   # Grafana Enterprise
   # - "grafana-enterprise"
+
+grafana__db_type: "mysql"
+grafana__db_host: "192.168.5.107:3306"
+grafana__db_name: "grafana"
+grafana__db_user: "grafana_admin"
+grafana__db_password: "Grafana@123"
