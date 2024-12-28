@@ -1,12 +1,22 @@
-- name: "yum: repofile"
-  template:
+- name: "create directory"
+  file:
+    state: directory
     owner: root
     group: root
     mode: 0755
-    src: "{{ item.temp }}"
-    dest: "/etc/yum.repos.d/{{ item.repo }}"
+    path: "{{ item }}"
   with_items:
-    - "{{ grafana__yum_list }}"
+    - "{{ grafana__dir_upload }}"
+
+# - name: "yum: repofile"
+#   template:
+#     owner: root
+#     group: root
+#     mode: 0755
+#     src: "{{ item.temp }}"
+#     dest: "/etc/yum.repos.d/{{ item.repo }}"
+#   with_items:
+#     - "{{ grafana__yum_list }}"
 
 # - name: "yum: install grafana"
 #   yum:
@@ -15,9 +25,16 @@
 #   with_items:
 #     - "{{ grafana__rpm_list }}"
 
+- name: "grafana: copy file to target server"
+  copy:
+    owner: root
+    group: root
+    src: "{{ grafana__install_media }}"
+    dest: "{{ grafana__install_media_uploaded }}"
+
 - name: "grafana install rpm"
   shell: |
-    rpm -ivh {{ grafana__install_media }}
+    rpm -ivh {{ grafana__install_media_uploaded }}
 
 - name: "grafana: config file"
   template:

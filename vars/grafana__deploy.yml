@@ -64,6 +64,9 @@ java__dir_home: "{{ java__dir_base }}/jdk-17.0.10"
 
 grafana__install_media: "{{ dir__ansible_server__files }}/grafana/grafana-11.4.0-1.x86_64.rpm"
 
+grafana__dir_upload: "/upload/grafana"
+grafana__install_media_uploaded: "{{ grafana__dir_upload }}/grafana-11.4.0-1.x86_64.rpm"
+
 grafana__yum_list:
   - repo: "grafana.repo"
     temp: "grafana.repo.j2"
