@@ -35,6 +35,7 @@
 - name: "grafana install rpm"
   shell: |
     rpm -ivh {{ grafana__install_media_uploaded }}
+  ignore_errors: yes
 
 - name: "grafana: config file"
   template:
