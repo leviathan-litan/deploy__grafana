@@ -39,6 +39,7 @@
 
 - name: "grafana: config file"
   template:
+    backup: yes
     owner: root
     group: grafana
     mode: 0755
