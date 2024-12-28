@@ -8,12 +8,16 @@
   with_items:
     - "{{ grafana__yum_list }}"
 
-- name: "yum: install grafana"
-  yum:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - "{{ grafana__rpm_list }}"
+# - name: "yum: install grafana"
+#   yum:
+#     name: "{{ item }}"
+#     state: present
+#   with_items:
+#     - "{{ grafana__rpm_list }}"
+
+- name: "grafana install rpm"
+  shell: |
+    rpm -ivh {{ grafana__install_media }}
 
 - name: "grafana: config file"
   template:
