@@ -183,12 +183,12 @@ url = mysql://{{ grafana__db_user }}:{{ grafana__db_password }}@{{ grafana__db_h
 ;instrument_queries = false
 
 #################################### Session #############################
-[session]
-provider = mysql
-provider_config = {{ grafana__db_user }}:{{ grafana__db_password }}@tcp({{ grafana__db_host }}:{{ grafana__db_port }})/{{ grafana__db_name }}
-cookie_name = grafana_session
-cookie_secure = false
-session_life_time = 86400
+#[session]
+#provider = mysql
+#provider_config = {{ grafana__db_user }}:{{ grafana__db_password }}@tcp({{ grafana__db_host }}:{{ grafana__db_port }})/{{ grafana__db_name }}
+#cookie_name = grafana_session
+#cookie_secure = false
+#session_life_time = 86400
 
 #################################### Cache server #############################
 [remote_cache]
