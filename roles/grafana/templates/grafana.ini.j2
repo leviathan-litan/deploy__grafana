@@ -126,7 +126,7 @@ host = {{ grafana__db_host }}:{{ grafana__db_port }}
 name = {{ grafana__db_name }}
 user = {{ grafana__db_user }}
 # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
-password = {{ grafana__db_password }}
+password = """{{ grafana__db_password }}"""
 
 # Use either URL or the previous fields to configure the database
 # Example: mysql://user:secret@host:port/database
@@ -172,7 +172,7 @@ password = {{ grafana__db_password }}
 # ;wal = false
 
 # For "mysql" and "postgres" only. Lock the database for the migrations, default is true.
-# ;migration_locking = true
+;migration_locking = true
 
 # For "mysql" and "postgres" only. How many seconds to wait before failing to lock the database for the migrations, default is 0.
 ;locking_attempt_timeout_sec = 0
