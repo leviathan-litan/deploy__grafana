@@ -90,3 +90,5 @@ grafana__db_port: "3306"
 grafana__db_name: "grafana"
 grafana__db_user: "grafana_admin"
 grafana__db_password: "Grafana@123"
+
+grafana__http_port: "3000"

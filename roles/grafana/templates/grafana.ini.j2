@@ -38,7 +38,7 @@
 ;http_addr =
 
 # The http port to use
-;http_port = 3000
+http_port = {{ grafana__http_port }}
 
 # The public facing domain name used to access grafana from a browser
 ;domain = localhost
@@ -120,15 +120,17 @@
 
 # Either "mysql", "postgres" or "sqlite3", it's your choice
 # ;type = sqlite3
+
 type = mysql
 host = {{ grafana__db_host }}:{{ grafana__db_port }}
 name = {{ grafana__db_name }}
 user = {{ grafana__db_user }}
 # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
 password = {{ grafana__db_password }}
+
 # Use either URL or the previous fields to configure the database
 # Example: mysql://user:secret@host:port/database
-url = mysql://{{ grafana__db_user }}:{{ grafana__db_password }}@{{ grafana__db_host }}:{{ grafana__db_port }}/{{ grafana__db_name }}
+# url = mysql://{{ grafana__db_user }}:{{ grafana__db_password }}@{{ grafana__db_host }}:{{ grafana__db_port }}/{{ grafana__db_name }}
 
 # Max idle conn setting default is 2
 ;max_idle_conn = 2
@@ -161,33 +163,33 @@ url = mysql://{{ grafana__db_user }}:{{ grafana__db_password }}@{{ grafana__db_h
 ;server_cert_name =
 
 # For "sqlite3" only, path relative to data_path setting
-;path = grafana.db
+# ;path = grafana.db
 
 # For "sqlite3" only. cache mode setting used for connecting to the database. (private, shared)
-;cache_mode = private
+# ;cache_mode = private
 
 # For "sqlite3" only. Enable/disable Write-Ahead Logging, https://sqlite.org/wal.html. Default is false.
-;wal = false
+# ;wal = false
 
 # For "mysql" and "postgres" only. Lock the database for the migrations, default is true.
-;migration_locking = true
+# ;migration_locking = true
 
 # For "mysql" and "postgres" only. How many seconds to wait before failing to lock the database for the migrations, default is 0.
 ;locking_attempt_timeout_sec = 0
 
 # For "sqlite" only. How many times to retry query in case of database is locked failures. Default is 0 (disabled).
-;query_retries = 0
+# ;query_retries = 0
 
 # For "sqlite" only. How many times to retry transaction in case of database is locked failures. Default is 5.
-;transaction_retries = 5
+# ;transaction_retries = 5
 
 # Set to true to add metrics and tracing for database queries.
 ;instrument_queries = false
 
 #################################### Session #############################
-[session]
-provider = mysql
-provider_config = `{{ grafana__db_user }}:{{ grafana__db_password }}@tcp({{ grafana__db_host }}:{{ grafana__db_port }})/{{ grafana__db_name }}`
+# [session]
+# provider = mysql
+# provider_config = `{{ grafana__db_user }}:{{ grafana__db_password }}@tcp({{ grafana__db_host }}:{{ grafana__db_port }})/{{ grafana__db_name }}`
 
 #################################### Cache server #############################
 [remote_cache]
@@ -1827,7 +1829,7 @@ timeout = 30s
 # For information on what formatting patterns that are supported https://momentjs.com/docs/#/displaying/
 
 # Default system date format used in time range picker and other places where full time is displayed
-;full_date = YYYY-MM-DD HH:mm:ss
+full_date = YYYY-MM-DD HH:mm:ss
 
 # Used by graph and other places where we only show small intervals
 ;interval_second = HH:mm:ss
