@@ -85,10 +85,10 @@ grafana__rpm_list:
   # - "grafana-enterprise"
 
 # grafana__db_type: "mysql"
-grafana__db_host: "192.168.5.107"
+grafana__db_host: "192.168.5.104"
 grafana__db_port: "3306"
 grafana__db_name: "grafana"
 grafana__db_user: "grafana_admin"
-grafana__db_password: "Grafana!234"
+grafana__db_password: "Grafana_1234"
 
 grafana__http_port: "3000"
