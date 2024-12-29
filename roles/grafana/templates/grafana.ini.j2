@@ -126,7 +126,8 @@ host = {{ grafana__db_host }}:{{ grafana__db_port }}
 name = {{ grafana__db_name }}
 user = {{ grafana__db_user }}
 password = {{ grafana__db_password }}
-url = mysql://{{ grafana__db_user }}:{{ grafana__db_password }}@{{ grafana__db_host }}:{{ grafana__db_port }}/{{ grafana__db_name }}
+
+;url = mysql://{{ grafana__db_user }}:{{ grafana__db_password }}@{{ grafana__db_host }}:{{ grafana__db_port }}/{{ grafana__db_name }}
 
 # Max idle conn setting default is 2
 ;max_idle_conn = 2

@@ -42,7 +42,7 @@
     backup: yes
     owner: root
     group: grafana
-    mode: 0755
+    mode: 0640
     src: "grafana.ini.j2"
     dest: "/etc/grafana/grafana.ini"
 
