@@ -28,6 +28,7 @@ python__command: "python2"
 # --- 开关
 
 # mysql__enabled_create_db_user: yes
+mysql__enabled_install: no
 
 # --- 参数
 
@@ -49,8 +50,8 @@ mysql__install_media_uploaded: "{{ mysql__dir_upload }}/install_media"
 mysql__dir_data: "/data/mysql"
 
 mysql__sql_files:
-  - sql: "create_user.sql"
-    temp: "create_user.sql.j2"
+  # - sql: "create_user.sql"
+  #   temp: "create_user.sql.j2"
   - sql: "create_database.sql"
     temp: "create_database.sql.j2"
 

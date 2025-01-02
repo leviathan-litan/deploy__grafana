@@ -17,21 +17,29 @@
     mode: 0755
     src: "{{ mysql__install_media }}"
     dest: "{{ mysql__install_media_uploaded }}"
+  when:
+    - mysql__enabled_install
 
 - name: "Find all rpm packages in {{ mysql__install_media_uploaded }}"
   find:
     path: "{{ mysql__install_media_uploaded }}"
     patterns: "*.rpm"
   register: rpm_files
+  when:
+    - mysql__enabled_install
 
 - name: "set fact: rpm_list"
   set_fact:
     rpm_list: "{{ rpm_files.files | map(attribute='path') | list }}"
+  when:
+    - mysql__enabled_install
 
 - name: "rpm uninstall mariadb"
   shell: |
     rpm -e --nodeps mariadb-libs
   ignore_errors: yes
+  when:
+    - mysql__enabled_install
 
 # 方式一
 # - name: "Install MySQL Server by yum and rpms"
@@ -45,6 +53,8 @@
 - name: "createrepo"
   shell: |
     createrepo {{ mysql__install_media_uploaded }}
+  when:
+    - mysql__enabled_install
 
 # - name: "backup original yum repofile"
 #   shell: |
@@ -58,11 +68,15 @@
     mode: 0755
     src: "mysql.repo.j2"
     dest: "/etc/yum.repos.d/mysql.repo"
+  when:
+    - mysql__enabled_install
   
 - name: "yum makecache"
   shell: |
     yum makecache
   ignore_errors: yes
+  when:
+    - mysql__enabled_install
 
 # not install: 'mysql-community-devel'
 - name: "yum install"
@@ -70,6 +84,8 @@
     name:  ['mysql-community-client', 'mysql-community-client-plugins', 'mysql-community-common', 'mysql-community-debuginfo', 'mysql-community-embedded-compat', 'mysql-community-icu-data-files', 'mysql-community-libs', 'mysql-community-libs-compat', 'mysql-community-server', 'mysql-community-server-debug','mysql-community-test']
     state: present
   ignore_errors: yes
+  when:
+    - mysql__enabled_install
 
 - name: "create MySQL Data Directory"
   file:
@@ -78,6 +94,8 @@
     group: mysql
     mode: 0755
     path: "{{ mysql__dir_data }}"
+  when:
+    - mysql__enabled_install
 
 - name: "create my.cnf file"
   template:
@@ -86,21 +104,29 @@
     mode: 0644
     src: my.cnf.j2
     dest: "/etc/my.cnf"
+  when:
+    - mysql__enabled_install
 
 - name: "MySQL: start linux service"
   systemd:
     name: mysqld
     state: started
     enabled: yes
+  when:
+    - mysql__enabled_install
 
 - name: "Get mysql temporary root password"
   shell: |
     cat /var/log/mysqld.log | grep 'temporary password' | awk '{ print $NF}' | tail -n 1
   register: mysql_tmp_password
+  when:
+    - mysql__enabled_install
 
 - name: "MySQL: set new mysql root password"
   shell: |
     mysqladmin -h localhost -u root -p'{{ mysql_tmp_password.stdout }}' password '{{ mysql__db_root_password }}'
+  when:
+    - mysql__enabled_install
 
 # 创建用户
 # - name: "create_user.sql / upload"
